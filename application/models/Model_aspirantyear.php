@@ -46,7 +46,15 @@ class Model_aspirantyear extends CI_Model
 
 		return false;
 	}
-
+    
+	public function checkIfExists($title) {
+		if($title) {
+			$sql   = "SELECT * FROM aspirant_year WHERE title  LIKE '%$title%'";
+			$query = $this->db->query($sql);
+			return $query->num_rows();
+		}
+	}
+	
 	public function getActiveMaster()
 	{
 		$sql = "SELECT * FROM aspirant_year_id WHERE active = ?";

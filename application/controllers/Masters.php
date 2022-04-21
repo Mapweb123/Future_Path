@@ -39,16 +39,22 @@ class Masters extends Admin_Controller
         		'title' => $this->input->post('aspirantyear_name'),
         		'status' => $this->input->post('active'),	
         	);
-
-        	$create = $this->model_aspirantyear->create($data);
-        	if($create == true) {
-        		$response['success'] = true;
-        		$response['messages'] = 'Succesfully created';
-        	}
-        	else {
-        		$response['success'] = false;
-        		$response['messages'] = 'Error in the database while creating the brand information';			
-        	}
+            
+			$checkIfExists = $this->model_aspirantyear->checkIfExists($data['title']);
+			if((int)$checkIfExists === 0 ) {
+				$create = $this->model_aspirantyear->create($data);
+				if($create == true) {
+					$response['success'] = true;
+					$response['messages'] = 'Succesfully created';
+				}
+				else {
+					$response['success'] = false;
+					$response['messages'] = 'Error in the database while creating the brand information';			
+				}
+			} else {
+				$response['success']  = false;
+				$response['messages'] = 'Record Already Exists..';
+			}
         }
         else {
         	$response['success'] = false;
@@ -122,16 +128,22 @@ class Masters extends Admin_Controller
 	        		'title' => $this->input->post('edit_aspirantyear_name'),
         			'status' => $this->input->post('edit_active'),	
 	        	);
-
-	        	$update = $this->model_aspirantyear->update($id, $data);
-	        	if($update == true) {
-	        		$response['success'] = true;
-	        		$response['messages'] = 'Succesfully updated';
-	        	}
-	        	else {
-	        		$response['success'] = false;
-	        		$response['messages'] = 'Error in the database while updated the brand information';			
-	        	}
+                
+				$checkIfExists = $this->model_aspirantyear->checkIfExists($data['title']);
+				if((int)$checkIfExists === 0 ) {
+					$update = $this->model_aspirantyear->update($id, $data);
+					if($update == true) {
+						$response['success'] = true;
+						$response['messages'] = 'Succesfully updated';
+					}
+					else {
+						$response['success'] = false;
+						$response['messages'] = 'Error in the database while updated the brand information';			
+					}
+				} else {
+					$response['success']  = false;
+					$response['messages'] = 'Record Already Exists..';
+				}
 	        }
 	        else {
 	        	$response['success'] = false;

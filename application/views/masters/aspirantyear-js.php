@@ -61,6 +61,8 @@ $(document).ready(function() {
               '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
               '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>'+response.messages+
             '</div>');
+			// hide the modal
+          	$("#addModal").modal('hide');
           }
         }
       }
@@ -130,6 +132,8 @@ function editFunc(id)
                   '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
                   '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>'+response.messages+
                 '</div>');
+				// hide the modal
+              	$("#editModal").modal('hide');
               }
             }
           }
