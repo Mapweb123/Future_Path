@@ -145,6 +145,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                          ?>></td>
                         <td> - </td>
                       </tr>
+                      <!--Added By Ashwin - 21/4/2022-->
+                      <tr>
+                        <td>Masters</td>
+                        <td><input type="checkbox" name="permission[]" id="permission" value="createMaster" <?php if($serialize_permission) {
+                          if(in_array('createMaster', $serialize_permission)) { echo "checked"; } 
+                        } ?> ></td>
+                        <td><input type="checkbox" name="permission[]" id="permission" value="updateMaster" <?php 
+                        if($serialize_permission) {
+                          if(in_array('updateMaster', $serialize_permission)) { echo "checked"; } 
+                        }
+                        ?>></td>
+                        <td><input type="checkbox" name="permission[]" id="permission" value="viewMaster" <?php 
+                        if($serialize_permission) {
+                          if(in_array('viewMaster', $serialize_permission)) { echo "checked"; }   
+                        }
+                        ?>></td>
+                        <td><input type="checkbox" name="permission[]" id="permission" value="deleteMaster" <?php 
+                        if($serialize_permission) {
+                          if(in_array('deleteMaster', $serialize_permission)) { echo "checked"; }  
+                        }
+                         ?>></td>
+                      </tr>
                       
 					 
                     </tbody>

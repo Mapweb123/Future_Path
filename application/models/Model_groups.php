@@ -6,7 +6,7 @@ class Model_groups extends CI_Model
 	{
 		parent::__construct();
 	}
-
+    
 	public function getGroupData($groupId = null) 
 	{
 		if($groupId) {
@@ -15,7 +15,8 @@ class Model_groups extends CI_Model
 			return $query->row_array();
 		}
 
-		$sql = "SELECT * FROM groups WHERE id != ? ORDER BY id DESC";
+		//$sql = "SELECT * FROM groups WHERE id != ? ORDER BY id DESC";
+		$sql = "SELECT * FROM groups WHERE 1 ORDER BY id DESC";
 		$query = $this->db->query($sql, array(1));
 		return $query->result_array();
 	}

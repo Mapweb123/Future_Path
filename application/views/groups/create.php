@@ -218,7 +218,49 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						</td>
                         <td> -</td>
                       </tr>
-                      
+                      <!--Added By Ashwin - 21/4/2022-->
+                      <tr>
+                        <td>Masters</td>
+                        <td>
+						<div class="form-check">
+						  <label class="form-check-label">
+						  <input type="checkbox" class="form-check-input" name="permission[]" value="createMaster">			 
+							<span class="form-check-sign">
+							  <span class="check"></span>
+							</span>
+						  </label>
+						</div>
+						</td>
+                        <td>
+						<div class="form-check">
+						  <label class="form-check-label">
+						  <input type="checkbox" class="form-check-input" name="permission[]" value="updateMaster">			 
+							<span class="form-check-sign">
+							  <span class="check"></span>
+							</span>
+						  </label>
+						</div>
+						</td>
+                        <td><div class="form-check">
+						  <label class="form-check-label">
+						  <input type="checkbox" class="form-check-input" name="permission[]" value="viewMaster">			 
+							<span class="form-check-sign">
+							  <span class="check"></span>
+							</span>
+						  </label>
+						</div>
+						</td>
+                        <td>
+						<div class="form-check">
+						  <label class="form-check-label">
+						  <input type="checkbox" class="form-check-input" name="permission[]" value="deleteMaster">			 
+							<span class="form-check-sign">
+							  <span class="check"></span>
+							</span>
+						  </label>
+						</div>
+						</td>
+                      </tr>
 					
                     </tbody>
                   </table>

@@ -7,7 +7,7 @@
         Tip 2: you can also add an image using data-image tag
     -->
       <div class="logo"><a href="<?php echo base_url('dashboard');?>" class="simple-text logo-normal">
-          Software Name
+          Future Path
         </a></div>
       <div class="sidebar-wrapper">
 	  
@@ -48,6 +48,28 @@
               </ul>
             </div>
           </li>
+          <?php } 
+		  if(in_array('createMaster', $user_permission) || in_array('updateMaster', $user_permission) || in_array('viewMaster', $user_permission) || in_array('deleteMaster', $user_permission)){  ?>
+          		<li class="nav-item" id="navMaster">
+                <a class="nav-link" data-toggle="collapse" href="#MasterMenu">
+                  <i class="fa fa-database" aria-hidden="true"></i>
+                  <p> Master
+                    <b class="caret"></b>
+                  </p>
+                </a>
+                <div class="collapse" id="MasterMenu">
+              <ul class="nav">
+                <?php if(in_array('createMaster', $user_permission) || in_array('updateMaster', $user_permission) || in_array('viewMaster', $user_permission) || in_array('deleteMaster', $user_permission)){ ?>
+                <li class="nav-item " id="create-groups">
+                  <a class="nav-link" href="<?php echo base_url('masters/aspirantyear');?>">
+                    <span class="sidebar-normal"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> Aspirant Year </span>
+                  </a>
+                </li>
+				<?php }
+				?>
+              </ul>
+            </div>	
+                </li>
 		  <?php } 
 		  if(in_array('createGroup', $user_permission) || in_array('updateGroup', $user_permission) || in_array('viewGroup', $user_permission) || in_array('deleteGroup', $user_permission)){  ?>
           <li class="nav-item" id="navGroup">
