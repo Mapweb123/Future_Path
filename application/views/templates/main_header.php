@@ -65,6 +65,11 @@
                     <span class="sidebar-normal"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> Aspirant Year </span>
                   </a>
                 </li>
+                <li class="nav-item " id="streams">
+                  <a class="nav-link" href="<?php echo base_url('masters/streams');?>">
+                    <span class="sidebar-normal"><i class="fa fa-university" aria-hidden="true"></i> Streams </span>
+                  </a>
+                </li>
 				<?php }
 				?>
               </ul>

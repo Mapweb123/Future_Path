@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <div id="messages"></div>
           
           <?php if(in_array('createMaster', $user_permission)): ?>
-            <button class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add Aspirant Year</button>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add Streams</button>
             
           <?php endif; ?>
 
@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <div class="card">
              <div class="card-header card-header-rose card-header-icon">
                   <div class="card-icon">
-                    <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
+                    <i class="fa fa-university" aria-hidden="true"></i>
                   </div>
                  
                 </div>
@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <table id="manageTable" class="table table-striped">
                 <thead>
                 <tr>
-                  <th>Aspirant Year</th>
+                  <th>Stream</th>
                   <th>Status</th>
                   <?php if(in_array('updateMaster', $user_permission) || in_array('deleteMaster', $user_permission)){ ?>
                   <th>Action</th>
@@ -59,33 +59,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-	  	<h5 class="modal-title">Add Aspirant Year</h5>
+	  	<h5 class="modal-title">Add Stream</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>        
       </div>
 
-      <form role="form" action="<?php echo base_url('masters/createAspirantYear') ?>" method="post" id="createForm">
+      <form role="form" action="<?php echo base_url('masters/createStream') ?>" method="post" id="createForm">
 
         <div class="modal-body">
 
           <div class="form-group">
-            <label for="brand_name" class="bmd-label-floating">Aspirant Year</label>
-            <select class="form-control" id="aspirantyear_name" name="aspirantyear_name" style="width:100%">
-                <?php
-				//$dates = range('2021', date('Y') + 5);
-				$dates = range(date('Y') + 5, '2021');
-				foreach($dates as $date){
-				    $year = "April ".($date-1) . ' - ' . "March ". $date;
-					//$year = "April ".$date . ' - ' . "March ". ($date + 1);
-					/*if (date('m', strtotime($date)) <= 6) {//Upto June
-						$year = "April ".($date-1) . ' - ' . "March ". $date;
-					} else {//After June
-						$year = "April ".$date . ' - ' . "March ". ($date + 1);
-					}*/
-				
-					echo "<option value='$year'>$year</option>";
-				}
-				?>
-            </select>
+            <label for="brand_name" class="bmd-label-floating">Stream</label>
+            <input type="text" class="form-control" id="stream_name" name="stream_name" autocomplete="off">
           </div>
 
           <div class="form-group">
@@ -116,27 +100,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Edit Aspirant Year</h4>
+        <h4 class="modal-title">Edit Stream</h4>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>        
       </div>
 
-      <form role="form" action="<?php echo base_url('masters/updateAspirantYear') ?>" method="post" id="updateForm">
+      <form role="form" action="<?php echo base_url('masters/updateStream') ?>" method="post" id="updateForm">
 
         <div class="modal-body">
           <div id="messages"></div>
 
           <div class="form-group">
-            <label for="brand_name" class="bmd-label-floating">Aspirant Year</label>
-            <select class="form-control" id="edit_aspirantyear_name" name="edit_aspirantyear_name" style="width:100%">
-                <?php
-				//$dates = range('2021', date('Y') + 5);
-				$dates = range(date('Y') + 5, '2021');
-				foreach($dates as $date){
-				    $year = "April ".($date-1) . ' - ' . "March ". $date;
-					echo "<option value='$year'>$year</option>";
-				}
-				?>
-            </select>
+            <label for="brand_name" class="bmd-label-floating">Stream</label>
+            <input type="text" class="form-control" id="edit_stream_name" name="edit_stream_name" autocomplete="off">
           </div>
 
           <div class="form-group">
@@ -167,17 +142,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Remove Aspirant Year</h4>
+        <h4 class="modal-title">Remove Stream</h4>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>        
       </div>
 
-      <form role="form" action="<?php echo base_url('masters/removeAspirantYear') ?>" method="post" id="removeForm">
+      <form role="form" action="<?php echo base_url('masters/removeStream') ?>" method="post" id="removeForm">
         <div class="modal-body">
           <p>Do you really want to remove?</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary">Confirm</button>
         </div>
       </form>
 

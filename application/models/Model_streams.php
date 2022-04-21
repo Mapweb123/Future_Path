@@ -1,20 +1,20 @@
 <?php 
 
-class Model_aspirantyear extends CI_Model
+class Model_streams extends CI_Model
 {
 	public function __construct()
 	{
 		parent::__construct();
 	}
     
-	public function getAspirantYearData($id = null) {
+	public function getStreamData($id = null) {
 		if($id) {
-			$sql = "SELECT * FROM aspirant_year WHERE aspirant_year_id = ?";
+			$sql = "SELECT * FROM streams WHERE stream_id = ?";
 			$query = $this->db->query($sql, array($id));
 			return $query->row_array();
 		}
 
-		$sql = "SELECT * FROM aspirant_year ORDER BY aspirant_year_id DESC";
+		$sql = "SELECT * FROM streams ORDER BY stream_id DESC";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -22,7 +22,7 @@ class Model_aspirantyear extends CI_Model
 	public function create($data = array())
 	{
 		if($data) {
-			$create = $this->db->insert('aspirant_year', $data);
+			$create = $this->db->insert('streams', $data);
 			return ($create == true) ? true : false;
 		}
 	}
@@ -30,8 +30,8 @@ class Model_aspirantyear extends CI_Model
 	public function update($id = null, $data = array())
 	{
 		if($id && $data) {
-			$this->db->where('aspirant_year_id', $id);
-			$update = $this->db->update('aspirant_year', $data);
+			$this->db->where('stream_id', $id);
+			$update = $this->db->update('streams', $data);
 			return ($update == true) ? true : false;
 		}
 	}
@@ -39,8 +39,8 @@ class Model_aspirantyear extends CI_Model
 	public function remove($id = null)
 	{
 		if($id) {
-			$this->db->where('aspirant_year_id', $id);
-			$delete = $this->db->delete('aspirant_year');
+			$this->db->where('stream_id', $id);
+			$delete = $this->db->delete('streams');
 			return ($delete == true) ? true : false;
 		}
 
@@ -49,22 +49,22 @@ class Model_aspirantyear extends CI_Model
     
 	public function checkIfExists($title) {
 		if($title) {
-			$sql   = "SELECT * FROM aspirant_year WHERE title  LIKE '%$title%'";
+			$sql   = "SELECT * FROM streams WHERE name  LIKE '$title'";
 			$query = $this->db->query($sql);
 			return $query->num_rows();
 		}
 	}
 	
-	public function fetchActiveAspirantYears()
+	public function getActiveMaster()
 	{
-		$sql = "SELECT * FROM aspirant_year_id WHERE active = ?";
+		$sql = "SELECT * FROM stream_id WHERE active = ?";
 		$query = $this->db->query($sql, array(1));
 		return $query->result_array();
 	}
 
-	public function countTotalAspirantYears()
+	public function countTotalMasters()
 	{
-		$sql = "SELECT * FROM aspirant_year_id WHERE active = ?";
+		$sql = "SELECT * FROM stream_id WHERE active = ?";
 		$query = $this->db->query($sql, array(1));
 		return $query->num_rows();
 	}
