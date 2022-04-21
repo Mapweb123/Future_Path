@@ -57,14 +57,14 @@ class Model_aspirantyear extends CI_Model
 	
 	public function fetchActiveAspirantYears()
 	{
-		$sql = "SELECT * FROM aspirant_year WHERE active = ?";
+		$sql = "SELECT * FROM aspirant_year WHERE status = ?";
 		$query = $this->db->query($sql, array(1));
 		return $query->result_array();
 	}
 
 	public function countTotalAspirantYears()
 	{
-		$sql = "SELECT * FROM aspirant_year WHERE active = ?";
+		$sql = "SELECT * FROM aspirant_year WHERE status = ?";
 		$query = $this->db->query($sql, array(1));
 		return $query->num_rows();
 	}

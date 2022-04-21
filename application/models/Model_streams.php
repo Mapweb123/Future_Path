@@ -57,14 +57,14 @@ class Model_streams extends CI_Model
 	
 	public function getActiveStreams()
 	{
-		$sql = "SELECT * FROM streams WHERE active = ?";
+		$sql = "SELECT * FROM streams WHERE status = ?";
 		$query = $this->db->query($sql, array(1));
 		return $query->result_array();
 	}
 
 	public function countTotalStreams()
 	{
-		$sql = "SELECT * FROM streams WHERE active = ?";
+		$sql = "SELECT * FROM streams WHERE status = ?";
 		$query = $this->db->query($sql, array(1));
 		return $query->num_rows();
 	}
