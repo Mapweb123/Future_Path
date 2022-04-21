@@ -60,7 +60,7 @@
                 <div class="collapse" id="MasterMenu">
               <ul class="nav">
                 <?php if(in_array('createMaster', $user_permission) || in_array('updateMaster', $user_permission) || in_array('viewMaster', $user_permission) || in_array('deleteMaster', $user_permission)){ ?>
-                <li class="nav-item " id="create-groups">
+                <li class="nav-item " id="aspirant-year">
                   <a class="nav-link" href="<?php echo base_url('masters/aspirantyear');?>">
                     <span class="sidebar-normal"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> Aspirant Year </span>
                   </a>

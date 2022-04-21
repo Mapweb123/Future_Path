@@ -75,13 +75,13 @@ $(document).ready(function() {
 function editFunc(id)
 { 
   $.ajax({
-    url: base_url + 'stores/fetchStoresDataById/'+id,
+    url: base_url + 'masters/fetchAspirantYearDataById/'+id,
     type: 'post',
     dataType: 'json',
     success:function(response) {
 
-      $("#edit_store_name").val(response.name);
-      $("#edit_active").val(response.active);
+      $("#edit_aspirantyear_name").val(response.title);
+      $("#edit_active").val(response.status);
 
       // submit the edit from 
       $("#updateForm").unbind('submit').bind('submit', function() {
@@ -156,7 +156,7 @@ function removeFunc(id)
       $.ajax({
         url: form.attr('action'),
         type: form.attr('method'),
-        data: { store_id:id }, 
+        data: { id:id }, 
         dataType: 'json',
         success:function(response) {
 

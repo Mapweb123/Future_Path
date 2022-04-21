@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <div class="card">
              <div class="card-header card-header-rose card-header-icon">
                   <div class="card-icon">
-                    <i class="material-icons">store</i>
+                    <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
                   </div>
                  
                 </div>
@@ -59,17 +59,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-	  	<h5 class="modal-title">Add Master</h5>
+	  	<h5 class="modal-title">Add Aspirant Year</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>        
       </div>
 
-      <form role="form" action="<?php echo base_url('stores/create') ?>" method="post" id="createForm">
+      <form role="form" action="<?php echo base_url('masters/createAspirantYear') ?>" method="post" id="createForm">
 
         <div class="modal-body">
 
           <div class="form-group">
-            <label for="brand_name" class="bmd-label-floating">Master Name</label>
-            <input type="text" class="form-control" id="store_name" name="store_name" autocomplete="off">
+            <label for="brand_name" class="bmd-label-floating">Aspirant Year</label>
+            <select class="form-control" id="aspirantyear_name" name="aspirantyear_name" style="width:100%">
+                <?php
+				//$dates = range('2021', date('Y') + 5);
+				$dates = range(date('Y') + 5, '2021');
+				foreach($dates as $date){
+				    $year = "April ".($date-1) . ' - ' . "March ". $date;
+					//$year = "April ".$date . ' - ' . "March ". ($date + 1);
+					/*if (date('m', strtotime($date)) <= 6) {//Upto June
+						$year = "April ".($date-1) . ' - ' . "March ". $date;
+					} else {//After June
+						$year = "April ".$date . ' - ' . "March ". ($date + 1);
+					}*/
+				
+					echo "<option value='$year'>$year</option>";
+				}
+				?>
+            </select>
           </div>
 
           <div class="form-group">
@@ -100,18 +116,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Edit Master</h4>
+        <h4 class="modal-title">Edit Aspirant Year</h4>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>        
       </div>
 
-      <form role="form" action="<?php echo base_url('stores/update') ?>" method="post" id="updateForm">
+      <form role="form" action="<?php echo base_url('masters/updateAspirantYear') ?>" method="post" id="updateForm">
 
         <div class="modal-body">
           <div id="messages"></div>
 
           <div class="form-group">
-            <label for="brand_name">Master Name</label>
-            <input type="text" class="form-control" id="edit_store_name" name="edit_store_name" placeholder="Enter store name" autocomplete="off">
+            <label for="brand_name" class="bmd-label-floating">Aspirant Year</label>
+            <select class="form-control" id="edit_aspirantyear_name" name="edit_aspirantyear_name" style="width:100%">
+                <?php
+				//$dates = range('2021', date('Y') + 5);
+				$dates = range(date('Y') + 5, '2021');
+				foreach($dates as $date){
+				    $year = "April ".($date-1) . ' - ' . "March ". $date;
+					echo "<option value='$year'>$year</option>";
+				}
+				?>
+            </select>
           </div>
 
           <div class="form-group">
@@ -142,11 +167,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Remove Master</h4>
+        <h4 class="modal-title">Remove Aspirant Year</h4>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>        
       </div>
 
-      <form role="form" action="<?php echo base_url('stores/remove') ?>" method="post" id="removeForm">
+      <form role="form" action="<?php echo base_url('masters/removeAspirantYear') ?>" method="post" id="removeForm">
         <div class="modal-body">
           <p>Do you really want to remove?</p>
         </div>

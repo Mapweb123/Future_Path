@@ -10,6 +10,7 @@ class Masters extends Admin_Controller
 		
 		$this->data['page_title'] = 'Masters';
 		$this->load->model('model_masters');
+		$this->load->model('model_aspirantyear');
 		
 	}
 	
@@ -17,73 +18,29 @@ class Masters extends Admin_Controller
 		if(!in_array('viewMaster', $this->permission)) {
             redirect('dashboard', 'refresh');
         }
-		$this->data['js'] = 'application/views/masters/index-js.php';
+		$this->data['js'] = 'application/views/masters/aspirantyear-js.php';
 		$this->render_template('masters/aspirantyear', $this->data);
 	}
-
-	public function index()
-	{
-		if(!in_array('viewMaster', $this->permission)) {
-            redirect('dashboard', 'refresh');
-        }
-        $this->data['js'] = 'application/views/masters/index-js.php';
-		$this->render_template('masters/index', $this->data);
-	}
-
-	public function fetchCategoryData()
-	{
-		if(!in_array('viewMaster', $this->permission)) {
-            redirect('dashboard', 'refresh');
-        }
-
-		$result = array('data' => array());
-
-		$data = $this->model_masters->getMastersData();
-
-		foreach ($data as $key => $value) {
-			// button
-			$buttons = '';
-
-			if(in_array('updateMaster', $this->permission)) {
-				$buttons = '<button type="button" class="btn btn-default" onclick="editFunc('.$value['id'].')" data-toggle="modal" data-target="#editModal"><i class="fa fa-edit"></i></button>';
-			}
-
-			if(in_array('deleteMaster', $this->permission)) {
-				$buttons .= ' <button type="button" class="btn btn-default" onclick="removeFunc('.$value['id'].')" data-toggle="modal" data-target="#removeModal"><i class="fa fa-trash"></i></button>';
-			}
-
-			$status = ($value['active'] == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
-
-			$result['data'][$key] = array(
-				$value['name'],
-				$status,
-				$buttons
-			);
-		} // /foreach
-
-		echo json_encode($result);
-	}
-
-	public function create()
-	{
+	
+	public function createAspirantYear() {
 		if(!in_array('createMaster', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
 
 		$response = array();
 
-		$this->form_validation->set_rules('store_name', 'Master name', 'trim|required');
+		$this->form_validation->set_rules('aspirantyear_name', 'Aspirant Year', 'trim|required');
 		$this->form_validation->set_rules('active', 'Active', 'trim|required');
 
 		$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
         if ($this->form_validation->run() == TRUE) {
         	$data = array(
-        		'name' => $this->input->post('store_name'),
-        		'active' => $this->input->post('active'),	
+        		'title' => $this->input->post('aspirantyear_name'),
+        		'status' => $this->input->post('active'),	
         	);
 
-        	$create = $this->model_masters->create($data);
+        	$create = $this->model_aspirantyear->create($data);
         	if($create == true) {
         		$response['success'] = true;
         		$response['messages'] = 'Succesfully created';
@@ -102,17 +59,51 @@ class Masters extends Admin_Controller
 
         echo json_encode($response);
 	}
+	
+	public function fetchAspirantYearData()
+	{
+		if(!in_array('viewMaster', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
 
-	public function fetchMastersDataById($id = null)
+		$result = array('data' => array());
+
+		$data = $this->model_aspirantyear->getAspirantYearData();
+
+		foreach ($data as $key => $value) {
+			// button
+			$buttons = '';
+
+			if(in_array('updateMaster', $this->permission)) {
+				$buttons = '<button type="button" class="btn btn-default" onclick="editFunc('.$value['aspirant_year_id'].')" data-toggle="modal" data-target="#editModal"><i class="fa fa-edit"></i></button>';
+			}
+
+			if(in_array('deleteMaster', $this->permission)) {
+				$buttons .= ' <button type="button" class="btn btn-default" onclick="removeFunc('.$value['aspirant_year_id'].')" data-toggle="modal" data-target="#removeModal"><i class="fa fa-trash"></i></button>';
+			}
+
+			$status = ($value['status'] == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
+
+			$result['data'][$key] = array(
+				$value['title'],
+				$status,
+				$buttons
+			);
+		} // /foreach
+
+		echo json_encode($result);
+	}
+    
+	public function fetchAspirantYearDataById($id = null)
 	{
 		if($id) {
-			$data = $this->model_masters->getMastersData($id);
+			$data = $this->model_aspirantyear->getAspirantYearData($id);
 			echo json_encode($data);
 		}
 		
 	}
-
-	public function update($id)
+	
+	public function updateAspirantYear($id)
 	{
 		if(!in_array('updateMaster', $this->permission)) {
 			redirect('dashboard', 'refresh');
@@ -121,18 +112,18 @@ class Masters extends Admin_Controller
 		$response = array();
 
 		if($id) {
-			$this->form_validation->set_rules('edit_store_name', 'Master name', 'trim|required');
+			$this->form_validation->set_rules('edit_aspirantyear_name', 'Aspirant Year', 'trim|required');
 			$this->form_validation->set_rules('edit_active', 'Active', 'trim|required');
 
 			$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
 	        if ($this->form_validation->run() == TRUE) {
 	        	$data = array(
-	        		'name' => $this->input->post('edit_store_name'),
-        			'active' => $this->input->post('edit_active'),	
+	        		'title' => $this->input->post('edit_aspirantyear_name'),
+        			'status' => $this->input->post('edit_active'),	
 	        	);
 
-	        	$update = $this->model_masters->update($id, $data);
+	        	$update = $this->model_aspirantyear->update($id, $data);
 	        	if($update == true) {
 	        		$response['success'] = true;
 	        		$response['messages'] = 'Succesfully updated';
@@ -156,18 +147,28 @@ class Masters extends Admin_Controller
 
 		echo json_encode($response);
 	}
+	
+	
+	public function index()
+	{
+		if(!in_array('viewMaster', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
+        $this->data['js'] = 'application/views/masters/index-js.php';
+		$this->render_template('masters/index', $this->data);
+	}
 
-	public function remove()
+	public function removeAspirantYear()
 	{
 		if(!in_array('deleteMaster', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
 		
-		$store_id = $this->input->post('store_id');
+		$ay_id = $this->input->post('id');
 
 		$response = array();
-		if($store_id) {
-			$delete = $this->model_masters->remove($store_id);
+		if($ay_id) {
+			$delete = $this->model_aspirantyear->remove($ay_id);
 			if($delete == true) {
 				$response['success'] = true;
 				$response['messages'] = "Successfully removed";	
