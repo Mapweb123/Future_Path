@@ -70,6 +70,11 @@
                     <span class="sidebar-normal"><i class="fa fa-university" aria-hidden="true"></i> Streams </span>
                   </a>
                 </li>
+                <li class="nav-item " id="exams">
+                  <a class="nav-link" href="<?php echo base_url('masters/exams');?>">
+                    <span class="sidebar-normal"><i class="fa fa-file-text-o" aria-hidden="true"></i> Exams </span>
+                  </a>
+                </li>
 				<?php }
 				?>
               </ul>

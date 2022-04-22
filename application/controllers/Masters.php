@@ -9,11 +9,13 @@ class Masters extends Admin_Controller
 		$this->not_logged_in();
 		
 		$this->data['page_title'] = 'Masters';
-		$this->load->model('model_masters');
+		//$this->load->model('model_masters');
 		$this->load->model('model_aspirantyear');
 		$this->load->model('model_streams');
-		
+		$this->load->model('Model_exams');		
 	}
+	
+	/*--------- Aspirant Year Functions START----------*/
 	
 	public function aspirantyear() {
 		if(!in_array('viewMaster', $this->permission)) {
@@ -199,6 +201,7 @@ class Masters extends Admin_Controller
 		echo json_encode($response);
 	}
 	
+	/*--------- Aspirant Year Functions END----------*/
 	
 	/*--------- Streams Functions START----------*/
 	public function streams() {
@@ -374,5 +377,190 @@ class Masters extends Admin_Controller
 
 		echo json_encode($response);
 	}
+	
+	/*--------- Streams Functions END----------*/
+	
+	/*--------- Exams Functions START----------*/
+	
+	public function exams() {
+		if(!in_array('viewMaster', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
+		$this->data['js']      = 'application/views/masters/exams/exams-js.php';
+		$this->data['streams'] = $this->model_streams->getStreamData();
+		$this->render_template('masters/exams/index', $this->data);
+	}
+	
+	public function fetchExamData()
+	{
+		if(!in_array('viewMaster', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
+
+		$result = array('data' => array());
+
+		$data = $this->Model_exams->getExamData();
+
+		foreach ($data as $key => $value) {
+			// button
+			$buttons = '';
+
+			if(in_array('updateMaster', $this->permission)) {
+				$buttons = '<button type="button" class="btn btn-default" onclick="editFunc('.$value['exam_id'].')" data-toggle="modal" data-target="#editModal"><i class="fa fa-edit"></i></button>';
+			}
+
+			if(in_array('deleteMaster', $this->permission)) {
+				$buttons .= ' <button type="button" class="btn btn-default" onclick="removeFunc('.$value['exam_id'].')" data-toggle="modal" data-target="#removeModal"><i class="fa fa-trash"></i></button>';
+			}
+
+			$status = ($value['status'] == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
+
+			$result['data'][$key] = array(
+				$value['name'],
+				$value['stream_name'],
+				$status,
+				$buttons
+			);
+		} // /foreach
+
+		echo json_encode($result);
+	}
+	
+	public function createExam() {
+		if(!in_array('createMaster', $this->permission)) {
+			redirect('dashboard', 'refresh');
+		}
+
+		$response = array();
+
+		$this->form_validation->set_rules('exam_name', 'Exam Name', 'trim|required');
+        $this->form_validation->set_rules('stream_name', 'Stream Name', 'trim|required');
+		$this->form_validation->set_rules('active', 'Active', 'trim|required');
+
+		$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
+
+        if ($this->form_validation->run() == TRUE) {
+        	$data = array(
+        		'name'      => $this->input->post('exam_name'),
+                'stream_id' => $this->input->post('stream_name'),
+        		'status'    => $this->input->post('active'),	
+        	);
+            
+			$checkIfExists = $this->Model_exams->checkIfExists($data['name']);
+			if((int)$checkIfExists === 0 ) {
+				$create = $this->Model_exams->create($data);
+				if($create == true) {
+					$response['success'] = true;
+					$response['messages'] = 'Succesfully created';
+				}
+				else {
+					$response['success'] = false;
+					$response['messages'] = 'Error in the database while creating the brand information';			
+				}
+			} else {
+				$response['success']  = false;
+				$response['messages'] = 'Record Already Exists..';
+			}
+        }
+        else {
+        	$response['success'] = false;
+        	foreach ($_POST as $key => $value) {
+        		$response['messages'][$key] = form_error($key);
+        	}
+        }
+
+        echo json_encode($response);
+	}
+	
+	public function updateExam($id)
+	{
+		if(!in_array('updateMaster', $this->permission)) {
+			redirect('dashboard', 'refresh');
+		}
+
+		$response = array();
+
+		if($id) {
+            $this->form_validation->set_rules('edit_exam_name', 'Exam Name', 'trim|required');
+			$this->form_validation->set_rules('edit_stream_name', 'Exam', 'trim|required');
+			$this->form_validation->set_rules('edit_active', 'Active', 'trim|required');
+
+			$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
+
+	        if ($this->form_validation->run() == TRUE) {
+	        	$data = array(
+	        		'name'   => $this->input->post('edit_exam_name'),
+                    'stream_id'   => $this->input->post('edit_stream_name'),
+        			'status' => $this->input->post('edit_active'),	
+	        	);
+                
+				$checkIfExists = $this->Model_exams->checkIfExists($data['name']);
+				if((int)$checkIfExists === 0 ) {
+					$update = $this->Model_exams->update($id, $data);
+					if($update == true) {
+						$response['success'] = true;
+						$response['messages'] = 'Succesfully updated';
+					}
+					else {
+						$response['success'] = false;
+						$response['messages'] = 'Error in the database while updated the brand information';			
+					}
+				} else {
+					$response['success']  = false;
+					$response['messages'] = 'Record Already Exists..';
+				}
+	        }
+	        else {
+	        	$response['success'] = false;
+	        	foreach ($_POST as $key => $value) {
+	        		$response['messages'][$key] = form_error($key);
+	        	}
+	        }
+		}
+		else {
+			$response['success'] = false;
+    		$response['messages'] = 'Error please refresh the page again!!';
+		}
+
+		echo json_encode($response);
+	}
+	
+	public function removeExam()
+	{
+		if(!in_array('deleteMaster', $this->permission)) {
+			redirect('dashboard', 'refresh');
+		}
+		
+		$exam_id = $this->input->post('id');
+
+		$response = array();
+		if($exam_id) {
+			$delete = $this->Model_exams->remove($exam_id);
+			if($delete == true) {
+				$response['success'] = true;
+				$response['messages'] = "Successfully removed";	
+			}
+			else {
+				$response['success'] = false;
+				$response['messages'] = "Error in the database while removing the brand information";
+			}
+		}
+		else {
+			$response['success'] = false;
+			$response['messages'] = "Refersh the page again!!";
+		}
+
+		echo json_encode($response);
+	}
+	
+	public function fetchExamDataById($id = null)
+	{
+		if($id) {
+			$data = $this->Model_exams->getExamData($id);
+			echo json_encode($data);
+		}
+		
+	}
+	/*--------- Exams Functions END----------*/
 
 }
