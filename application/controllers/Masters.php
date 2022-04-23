@@ -13,7 +13,8 @@ class Masters extends Admin_Controller
 		$this->load->model('model_aspirantyear');
 		$this->load->model('model_streams');
 		$this->load->model('Model_exams');
-		$this->load->model('Model_feestype');		
+		$this->load->model('Model_feestype');
+		$this->load->model('model_category');		
 	}
 	
 	/*--------- Aspirant Year Functions START----------*/
@@ -743,5 +744,181 @@ class Masters extends Admin_Controller
 		
 	}	
 	/*--------- FEES TYPE Functions END----------*/
+    
+		/*--------- Category Functions START----------*/
+	public function category() {
+		if(!in_array('viewMaster', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
+		$this->data['js'] = 'application/views/masters/category/category-js.php';
+		$this->render_template('masters/category/index', $this->data);
+	}
+	
+	public function fetchCategoryData()
+	{
+		if(!in_array('viewMaster', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
 
+		$result = array('data' => array());
+
+		$data = $this->model_category->getCategoryData();
+
+		foreach ($data as $key => $value) {
+			// button
+			$buttons = '';
+
+			if(in_array('updateMaster', $this->permission)) {
+				$buttons = '<button type="button" class="btn btn-default" onclick="editFunc('.$value['cat_id'].')" data-toggle="modal" data-target="#editModal"><i class="fa fa-edit"></i></button>';
+			}
+
+			if(in_array('deleteMaster', $this->permission)) {
+				$buttons .= ' <button type="button" class="btn btn-default" onclick="removeFunc('.$value['cat_id'].')" data-toggle="modal" data-target="#removeModal"><i class="fa fa-trash"></i></button>';
+			}
+
+			$status = ($value['status'] == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
+
+			$result['data'][$key] = array(
+				$value['name'],
+				$status,
+				$buttons
+			);
+		} // /foreach
+
+		echo json_encode($result);
+	}
+	
+	public function createCategory() {
+		if(!in_array('createMaster', $this->permission)) {
+			redirect('dashboard', 'refresh');
+		}
+
+		$response = array();
+
+		$this->form_validation->set_rules('category_name', 'Category', 'trim|required');
+		$this->form_validation->set_rules('active', 'Active', 'trim|required');
+
+		$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
+
+        if ($this->form_validation->run() == TRUE) {
+        	$data = array(
+        		'name' => $this->input->post('category_name'),
+        		'status' => $this->input->post('active'),	
+        	);
+            
+			$checkIfExists = $this->model_category->checkIfExists($data['name']);
+			if((int)$checkIfExists === 0 ) {
+				$create = $this->model_category->create($data);
+				if($create == true) {
+					$response['success'] = true;
+					$response['messages'] = 'Succesfully created';
+				}
+				else {
+					$response['success'] = false;
+					$response['messages'] = 'Error in the database while creating the brand information';			
+				}
+			} else {
+				$response['success']  = false;
+				$response['messages'] = 'Record Already Exists..';
+			}
+        }
+        else {
+        	$response['success'] = false;
+        	foreach ($_POST as $key => $value) {
+        		$response['messages'][$key] = form_error($key);
+        	}
+        }
+
+        echo json_encode($response);
+	}
+	
+	public function fetchCategoryDataById($id = null)
+	{
+		if($id) {
+			$data = $this->model_category->getCategoryData($id);
+			echo json_encode($data);
+		}
+		
+	}
+	
+	public function updateCategory($id)
+	{
+		if(!in_array('updateMaster', $this->permission)) {
+			redirect('dashboard', 'refresh');
+		}
+
+		$response = array();
+
+		if($id) {
+			$this->form_validation->set_rules('edit_category_name', 'Category', 'trim|required');
+			$this->form_validation->set_rules('edit_active', 'Active', 'trim|required');
+
+			$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
+
+	        if ($this->form_validation->run() == TRUE) {
+	        	$data = array(
+	        		'name'   => $this->input->post('edit_category_name'),
+        			'status' => $this->input->post('edit_active'),	
+	        	);
+                
+				$checkIfExists = $this->model_category->checkIfExists($data['name']);
+				if((int)$checkIfExists === 0 ) {
+					$update = $this->model_category->update($id, $data);
+					if($update == true) {
+						$response['success'] = true;
+						$response['messages'] = 'Succesfully updated';
+					}
+					else {
+						$response['success'] = false;
+						$response['messages'] = 'Error in the database while updated the brand information';			
+					}
+				} else {
+					$response['success']  = false;
+					$response['messages'] = 'Record Already Exists..';
+				}
+	        }
+	        else {
+	        	$response['success'] = false;
+	        	foreach ($_POST as $key => $value) {
+	        		$response['messages'][$key] = form_error($key);
+	        	}
+	        }
+		}
+		else {
+			$response['success'] = false;
+    		$response['messages'] = 'Error please refresh the page again!!';
+		}
+
+		echo json_encode($response);
+	}
+	
+	public function removeCategory()
+	{
+		if(!in_array('deleteMaster', $this->permission)) {
+			redirect('dashboard', 'refresh');
+		}
+		
+		$catgeory_id = $this->input->post('id');
+
+		$response = array();
+		if($catgeory_id) {
+			$delete = $this->model_category->remove($catgeory_id);
+			if($delete == true) {
+				$response['success'] = true;
+				$response['messages'] = "Successfully removed";	
+			}
+			else {
+				$response['success'] = false;
+				$response['messages'] = "Error in the database while removing the brand information";
+			}
+		}
+		else {
+			$response['success'] = false;
+			$response['messages'] = "Refersh the page again!!";
+		}
+
+		echo json_encode($response);
+	}
+	
+	/*--------- Category Functions END----------*/
 }
