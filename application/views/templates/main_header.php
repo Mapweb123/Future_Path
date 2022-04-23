@@ -75,6 +75,11 @@
                     <span class="sidebar-normal"><i class="fa fa-file-text-o" aria-hidden="true"></i> Exams </span>
                   </a>
                 </li>
+                <li class="nav-item " id="feestype">
+                  <a class="nav-link" href="<?php echo base_url('masters/feestype');?>">
+                    <span class="sidebar-normal"><i class="fa fa-file-text-o" aria-hidden="true"></i> Fees Type </span>
+                  </a>
+                </li>
 				<?php }
 				?>
               </ul>

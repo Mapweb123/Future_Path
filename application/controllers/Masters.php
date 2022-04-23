@@ -12,7 +12,8 @@ class Masters extends Admin_Controller
 		//$this->load->model('model_masters');
 		$this->load->model('model_aspirantyear');
 		$this->load->model('model_streams');
-		$this->load->model('Model_exams');		
+		$this->load->model('Model_exams');
+		$this->load->model('Model_feestype');		
 	}
 	
 	/*--------- Aspirant Year Functions START----------*/
@@ -562,5 +563,185 @@ class Masters extends Admin_Controller
 		
 	}
 	/*--------- Exams Functions END----------*/
+	
+	/*--------- FEES TYPE Functions START----------*/
+	public function feestype() {
+		if(!in_array('viewMaster', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
+		$this->data['js'] = 'application/views/masters/feestype/feestype-js.php';
+		$this->render_template('masters/feestype/index', $this->data);
+	}
+	
+	public function fetchFeestypeData()
+	{
+		if(!in_array('viewMaster', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
+
+		$result = array('data' => array());
+
+		$data = $this->Model_feestype->getFeestypeData();
+
+		foreach ($data as $key => $value) {
+			// button
+			$buttons = '';
+
+			if(in_array('updateMaster', $this->permission)) {
+				$buttons = '<button type="button" class="btn btn-default" onclick="editFunc('.$value['fees_id'].')" data-toggle="modal" data-target="#editModal"><i class="fa fa-edit"></i></button>';
+			}
+
+			if(in_array('deleteMaster', $this->permission)) {
+				$buttons .= ' <button type="button" class="btn btn-default" onclick="removeFunc('.$value['fees_id'].')" data-toggle="modal" data-target="#removeModal"><i class="fa fa-trash"></i></button>';
+			}
+
+			$status = ($value['status'] == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
+
+			$result['data'][$key] = array(
+				$value['name'],
+				$value['amount'],
+				$status,
+				$buttons
+			);
+		} // /foreach
+
+		echo json_encode($result);
+	}
+	
+	public function createFeestype() {
+		if(!in_array('createMaster', $this->permission)) {
+			redirect('dashboard', 'refresh');
+		}
+
+		$response = array();
+
+		$this->form_validation->set_rules('feestype_name', 'Feestype Name', 'trim|required');
+        $this->form_validation->set_rules('amount', 'Amount', 'trim|required');
+		$this->form_validation->set_rules('active', 'Active', 'trim|required');
+
+		$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
+
+        if ($this->form_validation->run() == TRUE) {
+        	$data = array(
+        		'name'      => $this->input->post('feestype_name'),
+                'amount'    => $this->input->post('amount'),
+        		'status'    => $this->input->post('active'),	
+        	);
+			$checkIfExists = $this->Model_feestype->checkIfExists($data['name']);
+			if((int)$checkIfExists === 0 ) {
+				$create = $this->Model_feestype->create($data);
+				if($create == true) {
+					$response['success']  = true;
+					$response['messages'] = 'Succesfully created';
+				}
+				else {
+					$response['success']  = false;
+					$response['messages'] = 'Error in the database while creating the Fees Type information';			
+				}
+			} else {
+				$response['success']  = false;
+				$response['messages'] = 'Record Already Exists..';
+			}
+        }
+        else {
+        	$response['success'] = false;
+        	foreach ($_POST as $key => $value) {
+        		$response['messages'][$key] = form_error($key);
+        	}
+        }
+
+        echo json_encode($response);
+	}
+	
+	public function updateFeestype($id)
+	{
+		if(!in_array('updateMaster', $this->permission)) {
+			redirect('dashboard', 'refresh');
+		}
+
+		$response = array();
+
+		if($id) {
+            $this->form_validation->set_rules('edit_feestype_name', 'Feestype Name', 'trim|required');
+			$this->form_validation->set_rules('edit_amount', 'Amount', 'trim|required');
+			$this->form_validation->set_rules('edit_active', 'Active', 'trim|required');
+
+			$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
+
+	        if ($this->form_validation->run() == TRUE) {
+	        	$data = array(
+	        		'name'    => $this->input->post('edit_feestype_name'),
+                    'amount'  => $this->input->post('edit_amount'),
+        			'status'  => $this->input->post('edit_active'),	
+	        	);
+                
+				$checkIfExists = $this->Model_feestype->checkIfExists($data['name']);
+				if((int)$checkIfExists === 0 ) {
+					$update = $this->Model_feestype->update($id, $data);
+					if($update == true) {
+						$response['success'] = true;
+						$response['messages'] = 'Succesfully updated';
+					}
+					else {
+						$response['success'] = false;
+						$response['messages'] = 'Error in the database while updated the brand information';			
+					}
+				} else {
+					$response['success']  = false;
+					$response['messages'] = 'Record Already Exists..';
+				}
+	        }
+	        else {
+	        	$response['success'] = false;
+	        	foreach ($_POST as $key => $value) {
+	        		$response['messages'][$key] = form_error($key);
+	        	}
+	        }
+		}
+		else {
+			$response['success'] = false;
+    		$response['messages'] = 'Error please refresh the page again!!';
+		}
+
+		echo json_encode($response);
+	}
+	
+	public function removeFeestype()
+	{
+		if(!in_array('deleteMaster', $this->permission)) {
+			redirect('dashboard', 'refresh');
+		}
+		
+		$feestype_id = $this->input->post('id');
+
+		$response = array();
+		if($feestype_id) {
+			$delete = $this->Model_feestype->remove($feestype_id);
+			if($delete == true) {
+				$response['success'] = true;
+				$response['messages'] = "Successfully removed";	
+			}
+			else {
+				$response['success'] = false;
+				$response['messages'] = "Error in the database while removing the brand information";
+			}
+		}
+		else {
+			$response['success'] = false;
+			$response['messages'] = "Refersh the page again!!";
+		}
+
+		echo json_encode($response);
+	}
+	
+	public function fetchFeestypeDataById($id = null)
+	{
+		if($id) {
+			$data = $this->Model_feestype->getFeestypeData($id);
+			echo json_encode($data);
+		}
+		
+	}	
+	/*--------- FEES TYPE Functions END----------*/
 
 }
