@@ -74,7 +74,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				//$dates = range('2021', date('Y') + 5);
 				$dates = range(date('Y') + 5, '2021');
 				foreach($dates as $date){
-				    $year = "April ".($date-1) . ' - ' . "March ". $date;
+					$year = "April - ".($date-1);
+				    //$year = "April ".($date-1) . ' - ' . "March ". $date;
 					//$year = "April ".$date . ' - ' . "March ". ($date + 1);
 					/*if (date('m', strtotime($date)) <= 6) {//Upto June
 						$year = "April ".($date-1) . ' - ' . "March ". $date;
@@ -132,7 +133,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				//$dates = range('2021', date('Y') + 5);
 				$dates = range(date('Y') + 5, '2021');
 				foreach($dates as $date){
-				    $year = "April ".($date-1) . ' - ' . "March ". $date;
+				    $year = "April - ".($date-1);
+					//$year = "April ".($date-1) . ' - ' . "March ". $date;
 					echo "<option value='$year'>$year</option>";
 				}
 				?>
