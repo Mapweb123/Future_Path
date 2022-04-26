@@ -51,6 +51,25 @@
             </div>
           </div>
         </div>
+        
+        <div class="input-group mb-3">          
+          <select class="form-control" name="aspirant_year_id">
+          	<option value="">-Aspirant Year-</option>
+            <?php 
+			foreach($aspirant_year as $data)
+            {
+				echo '<option value="'.$data['aspirant_year_id'].'">'.$data['title'].'</option>';
+            }
+			?>
+          </select>
+          <!--<div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>-->
+        </div>
+        
+        
         <div class="row">
           <!--<div class="col-8">
             <div class="icheck-primary">

@@ -1,6 +1,6 @@
 <body class="">
   <div class="wrapper ">
-    <div class="sidebar" data-color="purple" data-background-color="white" data-image="<?php echo base_url('assets/material-dashboard/assets/img/sidebar-1.jpg');?>">
+    <div class="sidebar" data-color="green" data-background-color="white" data-image="<?php echo base_url('assets/material-dashboard/assets/img/sidebar-1.jpg');?>">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
@@ -123,7 +123,7 @@
 		  <li class="nav-item" id="storesMainNav">
             <a class="nav-link" href="<?php echo base_url('stores');?>">
               <i class="material-icons">store</i>
-              <p>Stores</p>
+              <p>Branches</p>
             </a>
           </li>
 		 <?php	}  if(in_array('updateCompany', $user_permission)){?> 
@@ -149,12 +149,12 @@
             </a>
           </li>
 		  
-          <li class="nav-item " id="template-rtl">
-            <a class="nav-link" href="<?php echo base_url('dashboard/template/rtl');?>">
+          <!--<li class="nav-item " id="template-rtl">
+            <a class="nav-link" href="<?php //echo base_url('dashboard/template/rtl');?>">
               <i class="material-icons">language</i>
               <p>RTL Support</p>
             </a>
-          </li>
+          </li>-->
         </ul>
       </div>
     </div>
@@ -164,7 +164,7 @@
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <a class="navbar-brand" href="<?php echo base_url('dashboard');?>">Dashboard</a>
-			<a class="navbar-brand" href="<?php echo base_url('error');?>">Error 404</a>
+			<!--<a class="navbar-brand" href="<?php //echo base_url('error');?>">Error 404</a>-->
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
@@ -173,7 +173,7 @@
             <span class="navbar-toggler-icon icon-bar"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end">
-            <form class="navbar-form">
+            <!--<form class="navbar-form">
               <div class="input-group no-border">
                 <input type="text" value="" class="form-control" placeholder="Search...">
                 <button type="submit" class="btn btn-white btn-round btn-just-icon">
@@ -181,9 +181,9 @@
                   <div class="ripple-container"></div>
                 </button>
               </div>
-            </form>
+            </form>-->
             <ul class="navbar-nav">
-              <li class="nav-item">
+              <!--<li class="nav-item">
                 <a class="nav-link" href="javascript:;">
                   <i class="material-icons">dashboard</i>
                   <p class="d-lg-none d-md-block">
@@ -206,7 +206,7 @@
                   <a class="dropdown-item" href="#">Another Notification</a>
                   <a class="dropdown-item" href="#">Another One</a>
                 </div>
-              </li>
+              </li>-->
               <li class="nav-item dropdown">
                 <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">person</i>

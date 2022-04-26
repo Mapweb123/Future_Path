@@ -10,6 +10,7 @@ class Auth extends Admin_Controller
 		parent::__construct();
 
 		$this->load->model('model_auth');
+		$this->load->model('model_aspirantyear');
 	}
 
 	/* 
@@ -18,18 +19,20 @@ class Auth extends Admin_Controller
 	*/
 	public function login()
 	{
-		
-
 		$this->form_validation->set_rules('email', 'Email', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
-
+		$this->form_validation->set_rules('aspirant_year_id', 'Aspirant Year', 'required');
+		
+		$aspirant_year_data = $this->model_aspirantyear->fetchActiveAspirantYears();
+		$this->data['aspirant_year'] = $aspirant_year_data;
+		
         if ($this->form_validation->run() == TRUE) {
             // true case
            	$email_exists = $this->model_auth->check_email($this->input->post('email'));
 
            	if($email_exists == TRUE) {
            		$login = $this->model_auth->login($this->input->post('email'), $this->input->post('password'));
-
+				
            		if($login) {
            			$logged_in_sess = array(
            				'id' => $login['id'],
@@ -37,6 +40,7 @@ class Auth extends Admin_Controller
 				        'email'     => $login['email'],
 						'store_id' =>  $login['store_id'],
 				        'logged_in' => TRUE,
+						'aspirant_year_id' => $this->input->post('aspirant_year_id'),
 					);
 					
 
@@ -60,8 +64,8 @@ class Auth extends Admin_Controller
            	}	
         }
         else {
-            // false case
-            $this->load->view('login');
+            // false case            
+			$this->load->view('login',$this->data);
         }	
 	}
 

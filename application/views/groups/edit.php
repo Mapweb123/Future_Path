@@ -72,6 +72,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         }
                          ?>></td>
                       </tr>
+                      
+                      <tr>
+                        <td>Students</td>
+                        <td><input type="checkbox" name="permission[]" id="permission" value="createStudent" <?php if($serialize_permission) {
+                          if(in_array('createStudent', $serialize_permission)) { echo "checked"; } 
+                        } ?> ></td>
+                        <td><input type="checkbox" name="permission[]" id="permission" value="updateStudent" <?php 
+                        if($serialize_permission) {
+                          if(in_array('updateStudent', $serialize_permission)) { echo "checked"; } 
+                        }
+                        ?>></td>
+                        <td><input type="checkbox" name="permission[]" id="permission" value="viewStudent" <?php 
+                        if($serialize_permission) {
+                          if(in_array('viewStudent', $serialize_permission)) { echo "checked"; }   
+                        }
+                        ?>></td>
+                        <td><input type="checkbox" name="permission[]" id="permission" value="deleteStudent" <?php 
+                        if($serialize_permission) {
+                          if(in_array('deleteStudent', $serialize_permission)) { echo "checked"; }  
+                        }
+                         ?>></td>
+                      </tr>
+                      
                       <tr>
                         <td>Groups</td>
                         <td><input type="checkbox" name="permission[]" id="permission" value="createGroup" <?php 

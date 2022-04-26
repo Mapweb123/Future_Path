@@ -7,11 +7,11 @@
                   Dashboard
                 </a>
               </li>
-              <li>
+              <!--<li>
                 <a href="<?php echo base_url('error');?>">
                   Error 404
                 </a>
-              </li>
+              </li>-->
               
             </ul>
           </nav>
@@ -22,7 +22,7 @@
       </footer>
     </div>
   </div>
-  <div class="fixed-plugin">
+  <!--<div class="fixed-plugin">
     <div class="dropdown show-dropdown">
       <a href="#" data-toggle="dropdown">
         <i class="fa fa-cog fa-2x"> </i>
@@ -66,7 +66,7 @@
       
       </ul>
     </div>
-  </div>
+  </div>-->
   <!--   Core JS Files   -->
 
   <script src="<?php echo base_url('assets/material-dashboard/');?>assets/js/core/popper.min.js"></script>

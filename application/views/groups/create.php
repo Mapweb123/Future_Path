@@ -91,6 +91,48 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						</td>
                       </tr>
                       <tr>
+                        <td>Students</td>
+                        <td>
+						<div class="form-check">
+						  <label class="form-check-label">
+						  <input type="checkbox" class="form-check-input" name="permission[]" value="createStudent">			 
+							<span class="form-check-sign">
+							  <span class="check"></span>
+							</span>
+						  </label>
+						</div>
+						</td>
+                        <td>
+						<div class="form-check">
+						  <label class="form-check-label">
+						  <input type="checkbox" class="form-check-input" name="permission[]" value="updateUser">			 
+							<span class="form-check-sign">
+							  <span class="check"></span>
+							</span>
+						  </label>
+						</div>
+						</td>
+                        <td><div class="form-check">
+						  <label class="form-check-label">
+						  <input type="checkbox" class="form-check-input" name="permission[]" value="viewStudent">			 
+							<span class="form-check-sign">
+							  <span class="check"></span>
+							</span>
+						  </label>
+						</div>
+						</td>
+                        <td>
+						<div class="form-check">
+						  <label class="form-check-label">
+						  <input type="checkbox" class="form-check-input" name="permission[]" value="deleteStudent">			 
+							<span class="form-check-sign">
+							  <span class="check"></span>
+							</span>
+						  </label>
+						</div>
+						</td>
+                      </tr>
+                      <tr>
                         <td>Groups</td>
                         <td>
 						<div class="form-check">
