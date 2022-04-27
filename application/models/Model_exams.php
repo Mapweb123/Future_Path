@@ -47,9 +47,19 @@ class Model_exams extends CI_Model
 		return false;
 	}
     
-	public function checkIfExists($title) {
+	public function checkIfExists($title,$stream='',$id='') {
 		if($title) {
-			$sql   = "SELECT * FROM entrance_exam WHERE name LIKE '$title'";
+			$cond	=	" name LIKE '$title' ";
+			if($stream != '')
+			{
+				$cond	.=	" AND stream_id = $stream ";
+			}
+			if($id != '')
+			{
+				$cond	.=	" AND exam_id  != $id ";
+			}
+			$sql   = "SELECT * FROM entrance_exam WHERE ".$cond;
+			//die;
 			$query = $this->db->query($sql);
 			return $query->num_rows();
 		}

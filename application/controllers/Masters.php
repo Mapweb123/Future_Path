@@ -448,7 +448,7 @@ class Masters extends Admin_Controller
         		'status'    => $this->input->post('active'),	
         	);
             
-			$checkIfExists = $this->Model_exams->checkIfExists($data['name']);
+			$checkIfExists = $this->Model_exams->checkIfExists($data['name'],$data['stream_id']);
 			if((int)$checkIfExists === 0 ) {
 				$create = $this->Model_exams->create($data);
 				if($create == true) {
@@ -496,7 +496,7 @@ class Masters extends Admin_Controller
         			'status' => $this->input->post('edit_active'),	
 	        	);
                 
-				$checkIfExists = $this->Model_exams->checkIfExists($data['name']);
+				$checkIfExists = $this->Model_exams->checkIfExists($data['name'],$data['stream_id'],$id);
 				if((int)$checkIfExists === 0 ) {
 					$update = $this->Model_exams->update($id, $data);
 					if($update == true) {
