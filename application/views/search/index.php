@@ -4,6 +4,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12 col-xs-12">
+      <div id="messages"></div>
         <?php if($this->session->flashdata('errors')){ ?>
         <div class="alert alert-danger alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -13,13 +14,26 @@
           <div class="card-header card-header-primary">
             <h4 class="card-title">Search Collages</h4>
           </div>
-          <form role="form" action="<?php base_url('search') ?>" method="post">
+          <form role="form" action="<?php base_url('search') ?>" method="post" onsubmit="return checkForm();">
             <div class="card-body">
               <div class="row">
-                <div class="col-6">
+              	<div class="col-4">
+                  <div class="form-group" id="year_div">
+                    <label for="groups" class="bmd-label-floating">Aspirant Year</label>
+                    <select class="form-control" id="year" name="year">
+                      <option value="">Select Year</option>
+                      <?php foreach ($year_data as $k => $v): 
+					  if(@$post_data['year'] == $v['aspirant_year_id'].'#'.$v['title']) $strYear = 'selected="selected"'; else $strYear = '';
+					  ?>
+                      <option <?php echo $strYear;?> value="<?php echo $v['aspirant_year_id'].'#'.$v['title'] ?>"><?php echo $v['title'] ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
                   <div class="form-group">
                     <label for="groups" class="bmd-label-floating">Stream</label>
-                    <select class="form-control" id="stream" name="stream" style="width:100%">
+                    <select class="form-control" id="stream" name="stream" style="width:100%" onchange="getAjaxData('exam',this.value);">
                       <option value="">Select Stream</option>
                       <?php foreach ($stream_data as $k => $v): 
 					  if(@$post_data['stream'] == $v['stream_id']) $strStream = 'selected="selected"'; else $strStream = '';
@@ -29,20 +43,47 @@
                     </select>
                   </div>
                 </div>
-                <div class="col-6">
-                  <div class="form-group">
-                    <label for="groups" class="bmd-label-floating">Category</label>
-                    <select class="form-control" id="category" name="category">
-                      <option value="">Select Category</option>
-                      <?php foreach ($category_data as $k => $v): 
-					  if(@$post_data['category'] == $v['cat_id']) $strCate = 'selected="selected"'; else $strCate = '';
+                <div class="col-4">
+                  <div class="form-group" id="exam_div">
+                    <label for="groups" class="bmd-label-floating">Exam</label>
+                    <select class="form-control" id="exam" name="exam" style="width:100%" onchange="getAjaxData('cast_category',this.value);">
+                      <option value="">Select Exam</option>
+                      <?php foreach ($exam_data as $k => $v): 
+					  if(@$post_data['exam'] == $v['exam_id']) $strExam = 'selected="selected"'; else $strExam = '';
 					  ?>
-                      <option <?php echo $strCate;?> value="<?php echo $v['cat_id'] ?>"><?php echo $v['name'] ?></option>
+                      <option <?php echo $strExam;?> value="<?php echo $v['exam_id'] ?>"><?php echo $v['name'] ?></option>
                       <?php endforeach ?>
                     </select>
                   </div>
                 </div>
+                
                 <div class="col-4">
+                  <div class="form-group" id="cast_div">
+                    <label for="groups" class="bmd-label-floating">Cast Category</label>
+                    <select class="form-control" id="cast" name="cast">
+                      <option value="">Select Category</option>
+                      <?php foreach ($cast_data as $k => $v): 
+					  if(@$post_data['cast'] == $v['cast']) $strCate = 'selected="selected"'; else $strCate = '';
+					  ?>
+                      <option <?php echo $strCate;?> value="<?php echo $v['cast'] ?>"><?php echo $v['cast'] ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-8">
+                  <div class="form-group">
+                    <label for="groups" class="bmd-label-floating">Select Student</label>
+                    <select class="form-control" id="student" name="student">
+                      <option value="">Select Student</option>
+                      <?php foreach ($student_data as $k => $v): 
+					  if(@$post_data['student'] == $v['stud_id']) $strStud = 'selected="selected"'; else $strStud = '';
+					  ?>
+                      <option <?php echo $strStud;?> value="<?php echo $v['stud_id'] ?>"><?php echo $v['fname'].' '.$v['mname'].' '.$v['lname']; ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <!--<div class="col-4">
                   <div class="form-group" >
                     <div class="col-sm-10 checkbox-radios">
                       <div class="form-check form-check-inline">
@@ -57,36 +98,47 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div>-->
                 <div class="col-4">
                   <div class="form-group">
-                    <label for="groups" class="bmd-label-floating">Marks Lower Limit</label>
-                    <input type="text" class="form-control" id="marks_low" name="marks_low" autocomplete="off" value="<?php echo @$post_data['marks_low'];?>">
+                    <label for="groups" class="bmd-label-floating">Min Marks</label>
+                    <input type="text" class="form-control" id="min_marks" name="min_marks" autocomplete="off" value="<?php echo @$post_data['min_marks'];?>">
                   </div>
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label for="groups" class="bmd-label-floating">Marks Upper Limit</label>
-                    <input type="text" class="form-control" id="marks_upper" name="marks_upper" autocomplete="off" value="<?php echo @$post_data['marks_upper'];?>">
+                    <label for="groups" class="bmd-label-floating">Actual Marks</label>
+                    <input type="text" class="form-control" id="actual_marks" name="actual_marks" autocomplete="off" value="<?php echo @$post_data['actual_marks'];?>">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label for="groups" class="bmd-label-floating">Max Marks</label>
+                    <input type="text" class="form-control" id="max_marks" name="max_marks" autocomplete="off" value="<?php echo @$post_data['max_marks'];?>">
                   </div>
                 </div>
                 <div class="col-12">
+                	<button type="submit" class="btn btn-primary">Get Collage List</button>
+              		<a class="btn btn-primary" href="<?php echo $_SERVER['PHP_SELF'];?>">Clear</a>
+             	</div>
+                <div class="col-12">
                   <?php //echo '<pre>'; print_r($post_data); echo '</pre>';
-				if(@$post_data['marks_upper'] != ''){?>
+				  //echo '<pre>'; print_r($collage_data); echo '</pre>';
+				if(@$post_data['max_marks'] != ''){?>
                   <br />
                   <br />
                   <div class="table-responsive">
                     <table id="userTable" class="table table-hover text-nowrap">
                       <thead>
-                        <tr>
-                          <th>Exam</th>
+                        <tr>                          
                           <th>Sr. No.</th>
-                          <th>Code</th>
+                          <th>Exam</th>
+                          <th>Program / Code</th>
                           <th>Collage Name</th>
-                          <th>NRF Rank</th>
-                          <th>Cut Off Marks Or %</th>
-                          <th>Cut Off AI Rank</th>
-                          <th>Mess Hostel Fee</th>
+                          <th>NRF Rank / Quota</th>
+                          <th>Cut Off Open</th>
+                          <th>Cut Off Close</th>
+                          <th>Type</th>
                           <th>Total Fee</th>
                           <th>Collage Mo. No.</th>
                           <th>Collage Email</th>
@@ -94,187 +146,40 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr>
-                        <tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr>
-                        <tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr>
-                        <tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr>
-                        <tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr>
-                        <tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr>
-                        <tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr><tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr>
-                        <tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr>
-                        <tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr>
-                        <tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr>
-                        <tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr>
-                        <tr>
-                          <td>MHT-CET</td>
-                          <td>1</td>
-                          <td>1103</td>
-                          <td>GSMC, Mumbai - MBBS</td>
-                          <td>8</td>
-                          <td>657</td>
-                          <td>2669</td>
-                          <td>24000</td>
-                          <td>1,56,500</td>
-                          <td>9860130199</td>
-                          <td>gsmc_mumbai@gmail.com</td>
-                          <td>Amol Pawar (9898989898)</td>
-                        </tr>
+                      <?php
+					  foreach($collage_data as $k => $data){
+						  ?>
+                          <tr>
+                          	  <td><?php echo $k+1;?></td>
+                              <td><?php echo $exam_name;?></td>                              
+                              <td><?php echo $data['program'];?></td>
+                              <td><?php echo $data['collage'];?></td>
+                              <td><?php echo $data['quota'];?></td>
+                              <td><?php echo $data['open_rank'];?></td>
+                              <td><?php echo $data['close_rank'];?></td>
+                              <td><?php echo $data['collage_type'];?></td>
+                              <td>-</td>
+                              <td>-</td>
+                              <td>-</td>
+                              <td>-</td>
+                            </tr>
+                          <?php
+					  }
+					  ?>
+                      <!--<tr>
+                        <td>MHT-CET</td>
+                        <td>1</td>
+                        <td>1103</td>
+                        <td>GSMC, Mumbai - MBBS</td>
+                        <td>8</td>
+                        <td>657</td>
+                        <td>2669</td>
+                        <td>24000</td>
+                        <td>1,56,500</td>
+                        <td>9860130199</td>
+                        <td>gsmc_mumbai@gmail.com</td>
+                        <td>Amol Pawar (9898989898)</td>
+                      </tr>-->
                       </tbody>
                     </table>
                   </div>
@@ -284,9 +189,10 @@
             </div>
             <!-- /.card-body -->
             
-            <div class="card-footer">
+            <!--<div class="card-footer">
               <button type="submit" class="btn btn-primary">Get Collage List</button>
-            </div>
+              <a class="btn btn-primary" href="<?php echo $_SERVER['PHP_SELF'];?>">Clear</a>
+            </div>-->
           </form>
         </div>
         <!-- /.card --> 
