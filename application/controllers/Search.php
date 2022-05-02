@@ -126,6 +126,45 @@ class Search extends Admin_Controller
     	$response['messages'] = 'Error please refresh the page again!!';
 		echo json_encode($response);*/
 	}
+	
+	
+	public function info()
+	{
+		/*if(!in_array('viewUser', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }*/
+		$this->data['js'] = 'application/views/search/info-js.php';
+		
+		$year_data = $this->model_search->getActiveYear();
+		$this->data['year_data'] = $year_data;
+		
+		$yearData = trim(@$_POST['year']);	
+		$table_data = array();
+		if($yearData != ''){
+			$yearArr = explode('#',$yearData);
+			$year = $yearArr[1];
+			$table_data = $this->model_search->getTables($year);			
+		}
+		$this->data['table_data'] = $table_data;		
+		
+		if(@$_POST['btn_update_data'] == 'update_data'){
+			$this->model_search->updateCollageIntakeData($_POST);
+			$this->session->set_flashdata('success', 'All collages data updated successfully.');
+        	//redirect('search/info', 'refresh');
+		}
+		
+		$table = trim(@$_POST['table']);
+		$update_data = array();
+		if($table != ''){
+			$update_data = $this->model_search->getDataToUpdate($table);			
+		}
+		$this->data['update_data'] = $update_data;
+		
+		//echo '<pre>'; print_r($_POST); echo '</pre>';
+		$this->data['post_data'] = $_POST;
+
+		$this->render_template('search/info', $this->data);
+	}
 
 
 }

@@ -210,6 +210,82 @@ if($_POST['btn_jee_iiit'] != ''){
 }
 #jee_main_adv_2021 - data addition - ends
 
+#mahacet_engg_2021 - data addition - starts
+if($_POST['btn_engg_mhtcet'] != ''){
+	include 'excel_reader.php';     // include the class
+	// creates an object instance of the class, and read the excel file data
+	$excel = new PhpExcelReader;
+	//$excel->read('test.xls');
+	//$excel->read('FirstLstug2021-converted.xlsx');
+	
+	//echo '<pre>'; print_r($_POST); echo '</pre>';die;
+	$file_jee = trim($_POST['file_engg_mhtcet']);
+	$sel_year = trim($_POST['sel_year']);
+	
+	$excel->read($file_jee);
+	//echo '<pre>';var_export($excel->sheets);echo '</pre>';die;
+	$nr_sheets = count($excel->sheets);       // gets the number of sheets
+	$excel_data = '';              // to store the the html tables with data of each sheet
+	$limit = 3000;
+	//echo '<br>CNT : '.$nr_sheets;die;
+	
+	$sheet = $excel->sheets[0];
+	$values = $sheet['cells'];
+	//echo '<pre>DATA'; print_r($values); echo '</pre>';
+	$skipArr = array('of Maharashtra','Entrance Test','Cut Off List','Engineering and Technology');
+	
+	$i = 0;
+	$collageData = array(); 	
+	foreach($values as $key => $data){
+		//echo '<pre>data'; print_r($data); echo '</pre>';
+			
+		//echo '<br>'.$data[1].' => '.count($data).' => '.strpos($data[1], 'College');
+		if(count($data) == 1 && preg_match('/\bCollege\b/', $data[1])){
+			$clgData = explode('-',$data[1]);
+			$collageData[$i]['college_code'] = trim($clgData[0]);
+			$collageData[$i]['college'] = trim($clgData[1]);			
+			$i++;
+		}
+	}//foreach($values as $key => $data)	
+	//echo $excel_data;
+	//echo '<pre>collageData'; print_r($collageData); echo '</pre>';
+}
+#mahacet_engg_2021 - data addition - ends
+
+#mahacet_medical_2021 - data addition - starts
+if($_POST['btn_medi_mhtcet'] != ''){
+	include 'excel_reader.php';     // include the class
+	// creates an object instance of the class, and read the excel file data
+	$excel = new PhpExcelReader;
+	//$excel->read('test.xls');
+	//$excel->read('FirstLstug2021-converted.xlsx');
+	
+	//echo '<pre>'; print_r($_POST); echo '</pre>';die;
+	$file_jee = trim($_POST['file_medi_mhtcet']);
+	$sel_year = trim($_POST['sel_year']);
+	
+	$excel->read($file_jee);
+	//echo '<pre>';var_export($excel->sheets);echo '</pre>';die;
+	$nr_sheets = count($excel->sheets);       // gets the number of sheets
+	$excel_data = '';              // to store the the html tables with data of each sheet
+	$limit = 3000;
+	//echo '<br>CNT : '.$nr_sheets;die;
+	
+	// traverses the number of sheets and sets html table with each sheet data in $excel_data
+	$k = 1;
+	for($i=0; $i<$nr_sheets; $i++) {
+	  //$excel_data .= '<h4>Sheet '. ($i + 1) .' (<em>'. $excel->boundsheets[$i]['name'] .'</em>)</h4>'. sheetData($excel->sheets[$i]) .'<br/>'; 
+	  $sheet = $excel->sheets[$i];
+	  $values = $sheet['cells'];
+	  	//echo '<pre>DATA'; print_r($values); echo '</pre>';
+		foreach($values as $key => $data){
+			
+		}//foreach($values as $key => $data)
+	}
+	//echo $excel_data;
+}
+#mahacet_medical_2021 - data addition - ends
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -222,8 +298,8 @@ if($_POST['btn_jee_iiit'] != ''){
 <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" enctype="multipart/form-data">
   <table border="0" width="100%">
   	<tr>
-      <td width="37%" valign="top">Select Aspirant Year</td>
-      <td width="49%" valign="top">
+      <td width="40%" valign="top">Select Aspirant Year</td>
+      <td width="46%" valign="top">
       <select name="sel_year">
       <?php
 	  foreach($aspirant_year as $key => $val){
@@ -235,8 +311,8 @@ if($_POST['btn_jee_iiit'] != ''){
       <td width="14%" valign="top">&nbsp;</td>
     </tr>
     <tr>
-      <td width="37%" valign="top">Import in jee_main_adv_YEAR table (jee_main_adv_2021) <strong>IIT JoSSA</strong></td>
-      <td width="49%" valign="top"><input type="text" name="file_jee_iit" value="D:\wamp\www\Future_Path\excel\engg\2021\" style="width:100%;" />
+      <td width="40%" valign="top">Import in jee_main_adv_YEAR table (jee_main_adv_2021) <strong>IIT JoSSA</strong><br />https://collegedunia.com/exams/jee-main/jossa-counselling</td>
+      <td width="46%" valign="top"><input type="text" name="file_jee_iit" value="D:\wamp\www\Future_Path\excel\engg\2021\" style="width:100%;" />
         <!--<br />
     <pre>
     [1] => Array
@@ -264,14 +340,24 @@ if($_POST['btn_jee_iiit'] != ''){
       <td width="14%" valign="top"><input type="submit" name="btn_jee_iit" value="Import Jee IIT" /></td>
     </tr>
     <tr>
-      <td width="37%" valign="top">Import in jee_main_adv_YEAR table (jee_main_adv_2021) <strong>NIT JoSSA</strong></td>
-      <td width="49%" valign="top"><input type="text" name="file_jee_nit" value="D:\wamp\www\Future_Path\excel\engg\2021\" style="width:100%;" /></td>
+      <td width="40%" valign="top">Import in jee_main_adv_YEAR table (jee_main_adv_2021) <strong>NIT JoSSA</strong><br />https://collegedunia.com/exams/jee-main/jossa-counselling</td>
+      <td width="46%" valign="top"><input type="text" name="file_jee_nit" value="D:\wamp\www\Future_Path\excel\engg\2021\" style="width:100%;" /></td>
       <td width="14%" valign="top"><input type="submit" name="btn_jee_nit" value="Import Jee NIT" /></td>
     </tr>
     <tr>
-      <td width="37%" valign="top">Import in jee_main_adv_YEAR table (jee_main_adv_2021) <strong>IIIT JoSSA</strong></td>
-      <td width="49%" valign="top"><input type="text" name="file_jee_iiit" value="D:\wamp\www\Future_Path\excel\engg\2021\" style="width:100%;" /></td>
+      <td width="40%" valign="top">Import in jee_main_adv_YEAR table (jee_main_adv_2021) <strong>IIIT JoSSA</strong><br />https://collegedunia.com/exams/jee-main/jossa-counselling</td>
+      <td width="46%" valign="top"><input type="text" name="file_jee_iiit" value="D:\wamp\www\Future_Path\excel\engg\2021\" style="width:100%;" /></td>
       <td width="14%" valign="top"><input type="submit" name="btn_jee_iiit" value="Import Jee IIIT" /></td>
+    </tr>
+    <tr>
+      <td width="40%" valign="top">Import in mahacet_engg_YEAR table (mahacet_engg_2021) <strong>maha cet engg</strong><br />https://collegedunia.com/exams/mht-cet/cutoff</td>
+      <td width="46%" valign="top"><input type="text" name="file_engg_mhtcet" value="D:\wamp\www\Future_Path\excel\engg\2021\" style="width:100%;" /></td>
+      <td width="14%" valign="top"><input type="submit" name="btn_engg_mhtcet" value="Import MHT CET Engg" /></td>
+    </tr>
+    <tr>
+      <td width="40%" valign="top">Import in mahacet_medical_YEAR table (mahacet_medical_2021) <strong>maha cet </strong><br />https://view.mahacet.org/mahacet/admin/news_document/FirstLstug2021.pdf</td>
+      <td width="46%" valign="top"><input type="text" name="file_medi_mhtcet" value="D:\wamp\www\Future_Path\excel\medical\2021\" style="width:100%;" /></td>
+      <td width="14%" valign="top"><input type="submit" name="btn_medi_mhtcet" value="Import MHT CET Medi" /></td>
     </tr>
   </table>
 </form>

@@ -1,5 +1,12 @@
 <!-- Main content -->
-
+<style>
+.greenClass{
+	background-color:#FF8080;
+}
+.redClass{
+	background-color:#AEFFAE;
+}
+</style>
 <div class="content">
   <div class="container-fluid">
     <div class="row">
@@ -139,29 +146,38 @@
                           <th>Cut Off Open</th>
                           <th>Cut Off Close</th>
                           <th>Type</th>
+                          <th>Intake</th>
                           <th>Total Fee</th>
                           <th>Collage Mo. No.</th>
                           <th>Collage Email</th>
-                          <th>Ex Stud. Cont. No.</th>
+                          <th>Collage Website</th>
+                          <th>Mobile (Ex-Student)</th>
                         </tr>
                       </thead>
                       <tbody>
                       <?php
 					  foreach($collage_data as $k => $data){
+						  $strClass = '';
+						  if(@$post_data['actual_marks'] <= $data['close_rank'])
+						  	$strClass = 'class="greenClass"';
+						  else
+						  	$strClass = 'class="redClass"';
 						  ?>
                           <tr>
-                          	  <td><?php echo $k+1;?></td>
-                              <td><?php echo $exam_name;?></td>                              
-                              <td><?php echo $data['program'];?></td>
-                              <td><?php echo $data['collage'];?></td>
-                              <td><?php echo $data['quota'];?></td>
-                              <td><?php echo $data['open_rank'];?></td>
-                              <td><?php echo $data['close_rank'];?></td>
-                              <td><?php echo $data['collage_type'];?></td>
-                              <td>-</td>
-                              <td>-</td>
-                              <td>-</td>
-                              <td>-</td>
+                          	  <td <?php echo $strClass;?>><?php echo $k+1;?></td>
+                              <td <?php echo $strClass;?>><?php echo $exam_name;?></td>                              
+                              <td <?php echo $strClass;?>><?php echo $data['program'];?></td>
+                              <td <?php echo $strClass;?>><?php echo $data['collage'];?></td>
+                              <td <?php echo $strClass;?>><?php echo $data['quota'];?></td>
+                              <td <?php echo $strClass;?>><?php echo $data['open_rank'];?></td>
+                              <td <?php echo $strClass;?>><?php echo $data['close_rank'];?></td>
+                              <td <?php echo $strClass;?>><?php echo $data['collage_type'];?></td>
+                              <td <?php echo $strClass;?>><?php echo $data['intake'];?></td>
+                              <td <?php echo $strClass;?>><?php echo $data['total_fees'];?></td>
+                              <td <?php echo $strClass;?>><?php echo $data['collage_mobile'];?></td>
+                              <td <?php echo $strClass;?>><?php echo $data['collage_email'];?></td>
+                              <td <?php echo $strClass;?>><?php echo $data['collage_website'];?></td>
+                              <td <?php echo $strClass;?>><?php echo $data['exstud_mobile'];?></td>
                             </tr>
                           <?php
 					  }
